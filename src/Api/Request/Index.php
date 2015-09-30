@@ -10,7 +10,7 @@ namespace Jstewmc\ActiveResourceModel\Api\Request;
  * @license    MIT
  * @since      0.1.0
  */
-interface Index implements Request
+interface Index extends Request
 {
 	// nothing yet
 }

@@ -10,7 +10,7 @@ namespace Jstewmc\ActiveResourceModel\Api\Request;
  * @license    MIT
  * @since      0.1.0
  */
-interface Update implements Request
+interface Update extends Request
 {
 	// nothing yet
 }
