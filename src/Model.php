@@ -63,16 +63,12 @@ abstract class Model extends \Jstewmc\Model\Model
 	 *
 	 * I'll set the model's id property if successful.
 	 *
-	 * @param  Jstewmc\ActiveResourceModel\Api\Request\Create  $request  the create 
-	 *     request to send
-	 * @param  Jstewmc\ActiveResourceModel\Api\Response\Create  $response  the create 
-	 *     response to receive
 	 * @return  self
 	 * @throws  BadMethodCallException  if the model has an id
 	 * @throws  RuntimeException        if the api call fails
 	 * @since  0.1.0
 	 */
-	public function create(Api\Request\Create $request, Api\Response\Create $response) 
+	public function create() 
 	{
 		// if the model has been read, short-circuit
 		if (isset($this->id)) {
@@ -80,6 +76,9 @@ abstract class Model extends \Jstewmc\Model\Model
 				"You can't call create() on a model that has been read"
 			);
 		}
+		
+		$request  = $this->getCreateRequest();
+		$response = $this->getCreateResponse();
 		
 		$request->setData($this->data);
 		
@@ -95,16 +94,12 @@ abstract class Model extends \Jstewmc\Model\Model
 	 *
 	 * On success, I'll set the model's id to null.
 	 *
-	 * @param  Jstewmc\ActiveResourceModel\Api\Request\Delete  $request  the delete 
-	 *     request to send
-	 * @param  Jstewmc\ActiveResourceModel\Api\Response\Create  $response  the delete 
-	 *     response to receive
 	 * @return  self
 	 * @throws  BadMethodCallException  if the model does not have an id
 	 * @throws  RuntimeException        if the api call fails
 	 * @since  0.1.0
 	 */
-	public function delete(Api\Request\Delete $request, Api\Response\Delete $response) 
+	public function delete() 
 	{
 		// if the model has not been read, short-circuit
 		if ( ! isset($this->id)) {
@@ -112,6 +107,9 @@ abstract class Model extends \Jstewmc\Model\Model
 				"You can't call delete() on a model that has not been read"
 			);
 		}
+		
+		$request  = $this->getDeleteRequest();
+		$response = $this->getDeleteResponse():
 
 		$this->client->send($request)->receive($response);
 		
@@ -123,18 +121,19 @@ abstract class Model extends \Jstewmc\Model\Model
 	/**
 	 * Indexes the models
 	 *
-	 * @param  Jstewmc\ActiveResourceModel\Api\Request\Create  $request  the index
-	 *     request to send
-	 * @param  Jstewmc\ActiveResourceModel\Api\Response\Create  $response  the index 
-	 *     response to receive
 	 * @return  Jstewmc\Model\Model[]
 	 * @throws  RuntimeException  if the api call fails
 	 * @since  0.1.0
 	 */
-	public function index(Api\Request\Index $request, Api\Response\Index $response) 
+	public function index() 
 	{
 		$models = [];
 		
+		// get the model's request and response
+		$request  = $this->getIndexRequest();
+		$response = $this->getIndexResponse();
+		
+		// send and receive
 		$response = $this->client->send($request)->receive($response);
 		
 		// get the called class' classname
@@ -152,23 +151,24 @@ abstract class Model extends \Jstewmc\Model\Model
 	/**
 	 * Reads a model
 	 *
-	 * @param  Jstewmc\ActiveResourceModel\Api\Request\Read  $request  the read 
-	 *     request to send
-	 * @param  Jstewmc\ActiveResourceModel\Api\Response\Read  $response  the read 
-	 *     response to receive
 	 * @return  self
 	 * @throws  BadMethodCallException  if the model's id is not set
 	 * @throws  RuntimeException        if the api call fails
 	 * @since  0.1.0
 	 */
-	public function read(Api\Request\Read $request, Api\Response\Read $response) 
+	public function read($id) 
 	{
-		// if the model doesn't have an id, short-circuit
-		if ( ! isset($this->id)) {
-			throw new \BadMethodCallException(
-				"You can't call read() on a model that doesn't have an id"
-			);
+		// if id is not a positive integer, short-circuit
+		if ( ! is_numeric($id) || ! is_int(+$id) || $id < 1) {
+			throw new \InvalidArgumentException(
+				__METHOD__."() expects parameter one, id, to be a positive integer"
+			);	
 		}
+		
+		$this->id = $id;
+		
+		$request  = $this->getReadRequest();
+		$response = $this->getReadResponse();
 		
 		$response = $this->client->send($request)->receive($response);
 		
@@ -180,16 +180,12 @@ abstract class Model extends \Jstewmc\Model\Model
 	/**
 	 * Updates the model's data
 	 *
-	 * @param  Jstewmc\ActiveResourceModel\Api\Request\Update  $request  the update 
-	 *     request to send
-	 * @param  Jstewmc\ActiveResourceModel\Api\Response\Update  $response  the update 
-	 *     response to receive
 	 * @return  self
 	 * @throws  BadMethodCallException  if the model does not have an id
 	 * @throws  RuntimeException        if the api call fails
 	 * @since  0.1.0
 	 */
-	public function update(Api\Request\Update $request, Api\Response\Update $response)
+	public function update()
 	{
 		// if the model hasn't been read, short-circuit
 		if ( ! isset($this->id)) {
@@ -198,10 +194,96 @@ abstract class Model extends \Jstewmc\Model\Model
 			);
 		}
 		
+		$request  = $this->getUpdateRequest();
+		$response = $this->getUpdateResponse();
+		
 		$request->setData($this->data);
 		
 		$this->client->send($request)->receive($response);
 		
 		return $this;
 	}
+	
+	
+	/* !Protected method */
+	
+	/**
+	 * Returns the model's create request
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Request\Create
+	 * @since  0.1.0
+	 */
+	abstract protected function getCreateRequest();
+	
+	/**
+	 * Returns the model's create response
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Response\Create
+	 * @since  0.1.0
+	 */
+	abstract protected function getCreateResponse();
+	
+	/**
+	 * Returns the model's delete request
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Request\Delete
+	 * @since  0.1.0
+	 */
+	abstract protected function getDeleteRequest();
+	
+	/**
+	 * Returns the model's delete response
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Response\Delete
+	 * @since  0.1.0
+	 */
+	abstract protected function getDeleteResponse();
+	
+	/**
+	 * Returns the model's index request
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Request\Index
+	 * @since  0.1.0
+	 */
+	abstract protected function getIndexRequest();
+	
+	/**
+	 * Returns the model's index response
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Response\Index
+	 * @since  0.1.0
+	 */
+	abstract protected function getIndexResponse();
+	
+	/**
+	 * Returns the model's read request
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Request\Read
+	 * @since  0.1.0
+	 */
+	abstract protected function getReadRequest();
+	
+	/**
+	 * Returns the model's read response
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Response\Read
+	 * @since  0.1.0
+	 */
+	abstract protected function getReadResponse();
+	
+	/**
+	 * Returns the model's update request
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Request\Update
+	 * @since  0.1.0
+	 */
+	abstract protected function getUpdateRequest();
+	
+	/**
+	 * Returns the model's update response
+	 *
+	 * @return  Jstewmc\ActiveResourceModel\Api\Response\Update
+	 * @since  0.1.0
+	 */
+	abstract protected function getUpdateResponse();
 }
