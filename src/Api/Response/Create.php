@@ -12,7 +12,7 @@ namespace Jstewmc\ActiveResourceModel\Api\Response;
  * @license    MIT
  * @since      0.1.0
  */
-interface Create extends Request
+interface Create extends Response
 {
 	/* !Public methods */
 	
