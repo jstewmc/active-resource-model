@@ -12,7 +12,7 @@ namespace Jstewmc\ActiveResourceModel\Api\Response;
  * @license    MIT
  * @since      0.1.0
  */
-interface Delete implements Request
+interface Delete extends Request
 {
 	// nothing yet
 }
