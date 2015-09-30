@@ -13,7 +13,7 @@
         { "type": "git", "url": "https://github.com/jstewmc/model" }
     ],
 	"require": {
-		"jstewmc/model":"dev-master"
+		"jstewmc/model":"0.1.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "4.2.*"
