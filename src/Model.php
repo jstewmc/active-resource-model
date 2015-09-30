@@ -109,7 +109,7 @@ abstract class Model extends \Jstewmc\Model\Model
 		}
 		
 		$request  = $this->getDeleteRequest();
-		$response = $this->getDeleteResponse():
+		$response = $this->getDeleteResponse();
 
 		$this->client->send($request)->receive($response);
 		
