@@ -1,0 +1,26 @@
+{
+	"name": "jstewmc/active-resource-model",
+	"description": "A simple active resource model",
+	"license": "MIT",
+	"keywords": ["php", "model", "active", "resource"],
+	"authors": [
+		{
+			"name": "Jack Clayton",
+			"email": "clayjs0@gmail.com"	
+		}
+	],
+	"repositories": [
+        { "type": "git", "url": "https://github.com/jstewmc/model" }
+    ],
+	"require": {
+		"jstewmc/model":"dev-master"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "4.2.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Jstewmc\\ActiveResourceModel\\": "src/"
+		}
+	}
+}
