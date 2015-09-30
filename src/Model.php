@@ -172,7 +172,6 @@ abstract class Model extends \Jstewmc\Model\Model
 		
 		$response = $this->client->send($request)->receive($response);
 		
-		// set the model's data
 		$this->hydrate($response->getData());
 		
 		return $this;

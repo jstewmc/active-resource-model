@@ -22,7 +22,7 @@ interface Client
 	 * @return  Jstewmc\ActiveResourceModel\Api\Response\Response 
 	 * @since  0.1.0
 	 */
-	public function receive(Response\Response $response);
+	public function receive($response);
 	
 	/**
 	 * Executes the request
@@ -32,5 +32,5 @@ interface Client
 	 * @return  self
 	 * @since  0.1.0
 	 */
-	public function send(Request\Request $request);
+	public function send($request);
 }
