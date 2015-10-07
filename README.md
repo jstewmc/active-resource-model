@@ -3,7 +3,7 @@ A simple active resource model.
 
 An Active Resource Model is like an Active Record Model, only it uses an API instead of a database for persistent storage.
 
-```
+```php
 use \Jstewmc\Api;
 use \Jstewmc\ActiveResourceModel as Model;
 
