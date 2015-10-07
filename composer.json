@@ -10,10 +10,13 @@
 		}
 	],
 	"repositories": [
-        { "type": "git", "url": "https://github.com/jstewmc/model" }
+        { "type": "git", "url": "https://github.com/jstewmc/model" },
+        { "type": "git", "url": "https://github.com/jstewmc/api" }
     ],
 	"require": {
-		"jstewmc/model":"0.1.0"
+		"jstewmc/model":"dev-master",
+		"jstewmc/api":"dev-master",
+		"jstewmc/url":"0.1.1"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "4.2.*"
